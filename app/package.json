@@ -2,13 +2,16 @@
   "name": "app",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run",
+    "addPackages": "meteor add react-meteor-data twbs:bootstrap static-html fortawesome:fontawesome meteor/react-meteor-data",
+    "rmPackages": "meteor remove blaze-html-templates"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.36",
     "meteor-node-stubs": "^0.3.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-router": "^4.2.0"
+    "react-router": "^4.2.0",
+    "react-router-dom": "^4.2.2"
   }
 }

@@ -29,12 +29,8 @@ class App extends Component {
     return (
       <section>
       <div className="container">
-      <ul className="nav nav-tabs app-navigation">
-                <li role="presentation" className="disabled"><a href="#">List</a></li>
-    		    <li role="presentation" className="disabled"><a href="#">Edit</a></li>
-		    </ul>
         <header>
-            <h1>Voters List</h1>
+            <h1>Voters List { this.props.type } </h1>
         </header>
 
         <form className="new-task" onSubmit={this.handleSubmit.bind(this)} >
@@ -61,8 +57,9 @@ class App extends Component {
   }
 }
 
-export default withTracker(() => {
-  return {
-    voters: Voters.find({}, { sort: { createdAt: -1 } }).fetch(),
-  };
+export default withTracker(({ type }) => {
+    return {
+        type: type,
+        voters: Voters.find({}, { sort: { createdAt: -1 } }).fetch(),
+    };
 })(App);
