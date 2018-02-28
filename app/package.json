@@ -3,8 +3,8 @@
   "private": true,
   "scripts": {
     "start": "meteor run",
-    "addPackages": "meteor add react-meteor-data twbs:bootstrap static-html fortawesome:fontawesome meteor/react-meteor-data",
-    "rmPackages": "meteor remove blaze-html-templates"
+    "addp": "meteor add react-meteor-data twbs:bootstrap static-html fortawesome:fontawesome react-meteor-data",
+    "rmp": "meteor remove blaze-html-templates"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0-beta.36",

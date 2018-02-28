@@ -128,3 +128,11 @@ header .hide-completed {
 .app-navigation li {
 	padding-bottom: 0 !important;
 }
+
+.btn-group {
+        margin: 10px;
+}
+
+header .fa-user-o {
+    margin-left: 10px;
+}
