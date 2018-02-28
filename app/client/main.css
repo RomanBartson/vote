@@ -136,3 +136,11 @@ header .hide-completed {
 header .fa-user-o {
     margin-left: 10px;
 }
+
+.new-task.inline input{
+  width: 270px !important;
+  margin-left: 20px;
+}
+.new-task.inline label {
+  padding: 10px 0;
+}

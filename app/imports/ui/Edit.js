@@ -5,6 +5,8 @@ import { withTracker } from 'meteor/react-meteor-data';
 import { Voters } from '../api/voters.js';
 import { Vote } from '../api/vote.js';
 import Voter from './Voter.js';
+import Title from './Title.js';
+import Footer from './Footer.js';
 import { Link } from "react-router-dom";
 
  
@@ -15,25 +17,36 @@ class Edit extends Component {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.saveTitle = this.saveTitle.bind(this);
+        this.saveFooter = this.saveFooter.bind(this);
+        this.save = this.save.bind(this);
+
     }
     saveTitle(event) {
+        this.save(event, 'title');
+    }
+    saveFooter(event) {
+        this.save(event, 'footer');
+    }
+    save(event, type) {
         event.preventDefault();
+        let formId = event.target.name;
 
-        const title = ReactDOM.findDOMNode(this.refs.voteTitle).value.trim();
+        let ref = this.refs[type + formId];
+        const title = ReactDOM.findDOMNode(ref).value.trim();
         let lastVote = Vote.findOne({});
         if (!lastVote) {
             Vote.insert({
-                title: title,
+                [type + formId]: title,
                 createdAt: new Date(),
             });
         } else {
-            Vote.update(lastVote._id, {
-                title: title,
+            Vote.update(lastVote._id, {$set:{
+                [type + formId]: title,
                 createdAt: new Date(),
-            });
+            }});
         }
 
-        ReactDOM.findDOMNode(this.refs.voteTitle).value = '';
+        ReactDOM.findDOMNode(ref).value = '';
     }
     handleSubmit(event) {
         event.preventDefault();
@@ -59,18 +72,21 @@ class Edit extends Component {
           <section>
               <div className="container">
                 <header>
-                    <h1>{ vote.title }</h1>
-
-                    <div className="pull-right">
+                    <div className="text-right">
                         <Link to='/'>Finish Edit</Link>
                     </div>
-                    <form className="new-task" onSubmit={this.saveTitle} >
-                        <input
-                            type="text"
-                            ref="voteTitle"
-                            placeholder="Type vote name"
-                        />
-                    </form>
+                    <Title vote={vote} />
+                    {_.map([1,2,3,4,5,6], (item) => {
+                        return (
+                            <form className="new-task" name={item} key={item} onSubmit={this.saveTitle}>
+                                <input
+                                    type="text"
+                                    ref={"title" + item}
+                                    placeholder={"Type vote title " + item}
+                                />
+                            </form>
+                        );
+                    })}
                 </header>
 
                 <form className="new-task" onSubmit={this.handleSubmit} >
@@ -101,6 +117,22 @@ class Edit extends Component {
                     </header>
                     {this.renderList()}
                 </ul>
+
+                {_.map([1,2,3,4,5,6,7,8,9], (item) => {
+                        return (
+                            <form className="new-task inline" name={item} key={item} onSubmit={this.saveFooter}>
+                                <label>
+                                    {this.props.vote["footer" + item]}
+                                </label>
+                                <input
+                                    type="text"
+                                    ref={"footer" + item}
+                                    placeholder={this.props.vote["footer" + item]}
+                                    name={"footer" + item}
+                                />
+                            </form>
+                        );
+                })}
               </div>
           </section>
         );

@@ -9,6 +9,15 @@ export default class Voter extends Component {
         };
 
         this.toggleVote = this.toggleVote.bind(this);
+        this.check = this.check.bind(this);
+    }
+    check(e) {
+        console.log(e.target.name.substr(5));
+        const id = e.target.name.substr(5);
+        const value = e.target.value;
+        Voters.update(id, {
+            $set: { vote: value },
+        });
     }
     toggleVote(e) {
         this.setState({
@@ -59,6 +68,7 @@ export default class Voter extends Component {
                                 name={'vote_' + this.props.voter._id}
                                 value={value}
                                 disabled={preview}
+                                onChange={this.check}
                             />
                         </div>
                	   );
