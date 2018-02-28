@@ -10,6 +10,12 @@ import { Link } from "react-router-dom";
  
 class Index extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.toPDF = this.toPDF.bind(this);
+
+    }
     handleSubmit(event) {
         event.preventDefault();
 
@@ -27,7 +33,13 @@ class Index extends Component {
             <Voter key={voter._id} voter={voter} preview={false} />
         ));
     }
- 
+
+    toPDF() {
+         Meteor.call('vote.toPDF', this.props.vote, function(res, err) {
+            console.log(res,err);
+         });
+    }
+
     render() {
         const vote = this.props.vote;
         return (
@@ -75,6 +87,7 @@ class Index extends Component {
                             type="button"
                             className="btn btn-default"
                             title="To PDF"
+                            onClick={this.toPDF}
                         >
                             <i className="fa fa-file-pdf-o" title="To PDF" />
                         </button>
