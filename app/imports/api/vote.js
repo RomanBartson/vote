@@ -26,7 +26,7 @@ if (Meteor.isServer) {
                 }
                 if (res.filename) {
                     Vote.update({_id: vote._id }, {$set: {
-                        'filename': path.resolve('/storage/', name)
+                        'filename': '/storage/' + name
                     }});
                 }
             }));

@@ -6,6 +6,7 @@ import { Voters } from '../api/voters.js';
 import Voter from './Voter.js';
 import Title from './Title.js';
 import Footer from './Footer.js';
+import { Link } from "react-router-dom";
  
  class Check extends Component {
      render() {
@@ -23,7 +24,6 @@ import Footer from './Footer.js';
      }
  }
 
-//console.log(a.outerHTML);
 class App extends Component {
   constructor(props) {
     super(props);
@@ -39,13 +39,14 @@ class App extends Component {
   render() {
     const vote = this.props.vote || {};
     return (
-      <section>
+      <section className="page" style={{ padding: "20px"}}>
           <div ref="PDF">
+            <style dangerouslySetInnerHTML={{__html: `@page {size: A4; margin: 0;} @media print {body { padding: 50px 30px } body, html {width: 210mm, height: 297mm} section.page { page-break-after: always;} table {page-break-inside:auto} tr {page-break-inside:avoid; page-break-after:auto}`}} />
             <Title vote={vote} />
             <table width="100%" border="1px solid black">
                 <thead>
                 <tr style={{ textAlign: 'center' }}>
-                    {_.map(['Name', 'Yes', 'No', 'Ignore', 'Absent'], (value, key) => {
+                    {_.map(['#', 'Name', 'Yes', 'No', 'Ignore', 'Absent'], (value, key) => {
                         return (
                           <th key={key} style={{ textAlign: 'center' }}>
                               {value}
@@ -58,6 +59,7 @@ class App extends Component {
                 {_.map(this.props.voters, (voter, key) => {
                     return (
                         <tr key={key} >
+                            <td>{key + 1}</td>
                             <td title="Name">
                                 {voter.name}
                             </td>
@@ -81,6 +83,9 @@ class App extends Component {
             <Footer vote={vote} />
           </div>
           <footer>
+              <Link to='/' className="btn btn-default" title="Back">
+                  <i className="fa fa-arrow-left" title="Back" />
+              </Link>
               <button
                   type="button"
                   className="btn btn-default"
@@ -89,6 +94,7 @@ class App extends Component {
               >
                   <i className="fa fa-file-pdf-o" title="To PDF" />
               </button>
+              <a href={vote.filename} >Show PDF</a>
           </footer>
       </section>
     );
