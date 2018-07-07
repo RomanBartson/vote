@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Voters } from '../api/voters.js';
+import _ from 'underscore';
+
 export default class Voter extends Component {
     constructor(props) {
         super(props);

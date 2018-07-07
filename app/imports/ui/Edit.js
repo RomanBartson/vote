@@ -9,6 +9,7 @@ import Title from './Title.js';
 import Footer from './Footer.js';
 import { Link } from "react-router-dom";
 
+import _ from 'underscore';
  
 class Edit extends Component {
 

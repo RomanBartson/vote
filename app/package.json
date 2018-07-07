@@ -7,12 +7,13 @@
     "rmp": "meteor remove blaze-html-templates"
   },
   "dependencies": {
-    "@babel/runtime": "^7.0.0-beta.36",
+    "@babel/runtime": "^7.0.0-beta.49",
     "html-pdf": "^2.2.0",
     "meteor-node-stubs": "^0.3.2",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-router": "^4.2.0",
-    "react-router-dom": "^4.2.2"
+    "react-router-dom": "^4.2.2",
+    "underscore": "^1.9.1"
   }
 }

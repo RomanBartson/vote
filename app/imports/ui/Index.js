@@ -45,6 +45,7 @@ class Index extends Component {
 
     render() {
         const vote = this.props.vote;
+        console.log(vote);
         return (
             <section>
                 <div className="container">
@@ -96,15 +97,16 @@ class Index extends Component {
                         <Link
                             to="pdf"
                             className="btn btn-default"
-                            title="To PDF"
+                            title="Preview"
                         >
-                            <i className="fa fa-file-pdf-o" />
+                            {/*<i className="fa fa-file-pdf-o" />*/}
+                            <i className="fa fa-eye" />
                         </Link>
                         {vote.filename ?
                             <a
                                 className="btn btn-default"
                                 title="Download PDF"
-                                href={"/" + vote.filename}
+                                href={'/' + vote.filename}
                             >
                                 <i className="fa fa-download" title="To PDF" />
                             </a> : null
