@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withTracker } from 'meteor/react-meteor-data';
+import { Results } from '../api/results';
 import { Vote } from '../api/vote.js';
 import { Voters } from '../api/voters.js';
 import Voter from './Voter.js';
@@ -21,8 +22,9 @@ class BtnGroup extends Component {
         this.props.toPdf();
     }
     render() {
+        const disable = this.props.creating && !this.props.isResultsReady;
         return (
-            <div>
+            <div className="btn-group">
                 <Link to='/' className="btn btn-default" title="Back">
                     <i className="fa fa-arrow-left" title="Back" />
                 </Link>
@@ -31,10 +33,17 @@ class BtnGroup extends Component {
                     className="btn btn-default"
                     title="To PDF"
                     onClick={this.toPdf}
+                    disabled={disable}
                 >
-                    <i className="fa fa-file-pdf-o" title="To PDF" />
+                    <i className="fa fa-file-pdf-o" title="To PDF" />{' '}
+                    {this.props.creating ? <i className="fa fa-gear fa-spin"/> : null }
                 </button>
-                <a href={this.props.vote.filename} >Show PDF</a>
+                <a
+                    className="btn btn-default"
+                    href={disable ? '#' : this.props.vote.filename}
+                >
+                    Show PDF
+                </a>
         </div>);
     }
 }
@@ -59,11 +68,24 @@ class Check extends Component {
 class App extends Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            creating: false
+        };
         this.toPDF = this.toPDF.bind(this);
     }
+    componentWillReceiveProps(nextProps) {
+        if (this.props.isResultsReady != nextProps.isResultsReady) {
+            this.setState({
+                creating: !nextProps.isResultsReady
+            })
+        }
+    }
     toPDF() {
-        const html =  ReactDOM.findDOMNode(this.refs.PDF).outerHTML;
-        Meteor.call('vote.toPDF', html , function(res, err) {});
+        this.setState({creating: true});
+        Meteor.call('vote.toPDF', ReactDOM.findDOMNode(this.refs.PDF).outerHTML , (err) => {
+            if (err) throw err;
+        });
     }
     render() {
         const vote = this.props.vote || {};
@@ -84,7 +106,7 @@ class App extends Component {
         };
         return (
             <section className="page" style={{ padding: "20px" }}>
-                <BtnGroup vote={vote} toPdf={this.toPDF} />
+                <BtnGroup vote={vote} toPdf={this.toPDF} creating={this.state.creating} isResultsReady={this.props.isResultsReady}/>
                 <div ref="PDF">
                     <style dangerouslySetInnerHTML={{__html: `@media print { tr { page-break-inside: avoid !important; display: table !important; text-align: center; }}`}}/>
                     <table align={'center'} style={{width: '195mm', borderCollapse: 'collapse', borderSpacing: 0}}>
@@ -118,7 +140,7 @@ class App extends Component {
                     <Footer vote={vote} />
                 </div>
                 <footer>
-                    <BtnGroup vote={vote} toPdf={this.toPDF} />
+                    <BtnGroup vote={vote} toPdf={this.toPDF} creating={this.state.creating} isResultsReady={this.props.isResultsReady} />
                 </footer>
             </section>
         );
@@ -126,7 +148,9 @@ class App extends Component {
 }
 
 export default withTracker(() => {
+    const resultsStatus = Results.findOne({type: 'status'});
     return {
+        isResultsReady: resultsStatus ? resultsStatus.ready : null,
         vote: Vote.findOne({}),
         voters: Voters.find({}, { sort: { createdAt: -1 } }).fetch(),
     };

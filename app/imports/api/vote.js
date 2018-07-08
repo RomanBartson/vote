@@ -2,6 +2,7 @@ import { Mongo } from 'meteor/mongo';
 import { Random } from 'meteor/random';
 import pdf from 'html-pdf';
 import path from 'path';
+import { Results } from './results';
 import App from '../ui/App.js';
 
 export const Vote = new Mongo.Collection('vote');
@@ -60,6 +61,13 @@ const config = {
 if (Meteor.isServer) {
     Meteor.methods({
         'vote.toPDF'(html = '') {
+
+            if (!Results.findOne({type: 'status'})) {
+                Results.insert({type: 'status', ready: false});
+            } else {
+                Results.update({type: 'status'}, {$set: {ready: false}});
+            }
+
             let name = Random.id() + '.pdf';
             let _storage_path = path.resolve('../../../../../public', 'storage', name);
 
@@ -79,6 +87,7 @@ if (Meteor.isServer) {
                     Vote.update({_id: vote._id }, {$set: {
                         'filename': '/storage/' + name
                     }});
+                    Results.update({type: 'status'}, {$set: {ready: true}});
                 }
             }));
         },
